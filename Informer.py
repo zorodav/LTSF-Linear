@@ -12,11 +12,11 @@ class Model(nn.Module):
     """
     Informer with Propspare attention in O(LlogL) complexity
     """
-    def __init__(self, configs):
+    def __init__(self, configs, train_data = None):
         super(Model, self).__init__()
         self.pred_len = configs.pred_len
         self.output_attention = configs.output_attention
-
+        self.train_data = train_data
         # Embedding
         if configs.embed_type == 0:
             self.enc_embedding = DataEmbedding(configs.enc_in, configs.d_model, configs.embed, configs.freq,
