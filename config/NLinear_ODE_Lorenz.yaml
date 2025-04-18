@@ -1,0 +1,9 @@
+dataset:
+  name: ODE_Lorenz
+  pair_id: '1-3'  # Example: run on sub-datasets 1 to 3
+model:
+  name: NLinear
+  seq_len: value1
+  pred_len: 
+  enc_in:
+  individual:
