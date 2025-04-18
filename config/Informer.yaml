@@ -1,6 +1,21 @@
 
 dataset:
-  name: Informer
+  name: ODE_Lorenz
   pair_id: '1-3'  # Example: run on sub-datasets 1 to 3
 model:
-  param1: value1
+  pred_len: value1
+  output_attention:
+  enc_in:
+  d_model:
+  embed:
+  freq:
+  dropout:
+  dec_in:
+  factor:
+  n_heads:
+  d_ff:
+  activation:
+  e_layers:
+  distill:
+  d_layers:
+  c_out:
