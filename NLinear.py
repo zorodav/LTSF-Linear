@@ -41,5 +41,16 @@ class Model(nn.Module):
         return x # [Batch, Output length, Channel]
 
     def predict(self, test_data):
-        return predictions
-        
+        """
+        Generate predictions for the given test data.
+    
+        Args:
+            test_data (torch.Tensor): Input data of shape [Batch, Input length, Channel].
+    
+        Returns:
+            torch.Tensor: Predictions of shape [Batch, Output length, Channel].
+        """
+        self.eval()  # Set the model to evaluation mode
+        with torch.no_grad():  # Disable gradient computation for inference
+            predictions = self.forward(test_data)  # Pass test data through the forward method
+        return predictions        
