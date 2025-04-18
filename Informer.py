@@ -12,7 +12,7 @@ class Model(nn.Module):
     """
     Informer with Propspare attention in O(LlogL) complexity
     """
-    def __init__(self, configs, train_data=None):
+    def __init__(self, configs):
         super(Model, self).__init__()
         self.pred_len = configs.pred_len
         self.output_attention = configs.output_attention
