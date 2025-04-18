@@ -8,7 +8,7 @@ class Model(nn.Module):
     """
     Normalization-Linear
     """
-    def __init__(self, configs, train_data=None):
+    def __init__(self, configs):
         super(Model, self).__init__()
         self.seq_len = configs.seq_len
         self.pred_len = configs.pred_len
@@ -24,7 +24,6 @@ class Model(nn.Module):
         else:
             self.Linear = nn.Linear(self.seq_len, self.pred_len)
         
-        self.train_data = train_data
 
     def forward(self, x):
         # x: [Batch, Input length, Channel]
