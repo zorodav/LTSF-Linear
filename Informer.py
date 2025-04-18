@@ -102,12 +102,4 @@ class Model(nn.Module):
 
 
     def predict(self, test_data):
-        # Example placeholder logic for predictions
-        x_enc, x_mark_enc, x_dec, x_mark_dec = test_data
-        enc_out = self.enc_embedding(x_enc, x_mark_enc)
-        enc_out, _ = self.encoder(enc_out)
-
-        dec_out = self.dec_embedding(x_dec, x_mark_dec)
-        dec_out = self.decoder(dec_out, enc_out)
-
-        return dec_out[:, -self.pred_len:, :]  # Return the final predictions
+        return predictions
