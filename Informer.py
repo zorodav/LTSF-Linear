@@ -12,11 +12,10 @@ class Model(nn.Module):
     """
     Informer with Propspare attention in O(LlogL) complexity
     """
-    def __init__(self, configs, train_data = None):
+    def __init__(self, configs):
         super(Model, self).__init__()
         self.pred_len = configs.pred_len
         self.output_attention = configs.output_attention
-        self.train_data = train_data
         # Embedding
         if configs.embed_type == 0:
             self.enc_embedding = DataEmbedding(configs.enc_in, configs.d_model, configs.embed, configs.freq,
@@ -102,4 +101,12 @@ class Model(nn.Module):
 
 
     def predict(self, test_data):
-        return predictions
+        # Example placeholder logic for predictions
+         x_enc, x_mark_enc, x_dec, x_mark_dec = test_data
+         enc_out = self.enc_embedding(x_enc, x_mark_enc)
+         enc_out, _ = self.encoder(enc_out)
+ 
+         dec_out = self.dec_embedding(x_dec, x_mark_dec)
+         dec_out = self.decoder(dec_out, enc_out)
+ 
+         return dec_out[:, -self.pred_len:, :]  # Return the final predictions
