@@ -7,11 +7,11 @@ class Model(nn.Module):
     """
     Normalization-Linear
     """
-    def __init__(self, configs):
+    def __init__(self, configs, train_data = None):
         super(Model, self).__init__()
         self.seq_len = configs.seq_len
         self.pred_len = configs.pred_len
-        
+        self.train_data = train_data
         # Use this line if you want to visualize the weights
         # self.Linear.weight = nn.Parameter((1/self.seq_len)*torch.ones([self.pred_len,self.seq_len]))
         self.channels = configs.enc_in
