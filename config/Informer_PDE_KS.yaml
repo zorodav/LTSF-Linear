@@ -1,0 +1,19 @@
+dataset:
+  name: PDE_KS
+  pair_id: 'all'  # Run on all available sub-datasets
+
+model:
+  name: Informer
+  parameters:
+    enc_in: 24         # Input dimension for the encoder
+    dec_in: 24         # Input dimension for the decoder
+    c_out: 24          # Output dimension
+    seq_len: 96        # Length of the input sequence
+    label_len: 48      # Length of the label sequence
+    pred_len: 24       # Prediction length
+    factor: 5          # Attention factor
+    d_model: 512       # Dimension of model embeddings
+    n_heads: 8         # Number of attention heads
+    e_layers: 2        # Number of encoder layers
+    d_layers: 1        # Number of decoder layers
+    dropout: 0.1       # Dropout rate for regularization
