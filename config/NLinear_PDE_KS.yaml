@@ -1,0 +1,11 @@
+dataset:
+  name: PDE_KS
+  pair_id: 'all'  # Run on all available sub-datasets
+
+model:
+  name: NLinear
+  parameters:
+    input_size: 24         # Adjust depending on your data dimensions
+    output_size: 24        # Adjust depending on your prediction requirements
+    num_layers: 2          # Number of layers in the model
+    dropout: 0.5           # Dropout rate for model regularization
