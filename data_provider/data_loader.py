@@ -1,15 +1,18 @@
+from pathlib import Path
 import os
+import yaml
+import scipy.io
 import numpy as np
 import pandas as pd
-import os
 import torch
-from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import StandardScaler
 from utils.timefeatures import time_features
+from torch.utils.data import Dataset, DataLoader
 import warnings
 
-warnings.filterwarnings('ignore')
+top_dir = Path(__file__).parent
 
+warnings.filterwarnings('ignore')
 
 class Dataset_ETT_hour(Dataset):
     def __init__(self, root_path, flag='train', size=None,
@@ -290,15 +293,6 @@ class Dataset_Custom(Dataset):
 
     def inverse_transform(self, data):
         return self.scaler.inverse_transform(data)
-import os
-import yaml
-import scipy.io
-import numpy as np
-import pandas as pd
-import torch
-from torch.utils.data import Dataset
-from sklearn.preprocessing import StandardScaler
-from utils.timefeatures import time_features
 
 class ODE_Lorenz(Dataset):
     def __init__(self, root_path, flag='train', size=None, pair_id=3,
@@ -308,7 +302,6 @@ class ODE_Lorenz(Dataset):
         
         Parameters:
             root_path: Parent directory containing the ODE_Lorenz folder,
-                       e.g., "C:\\Users\\david\\Documents\\CTF-for-Science-1\\data"
             flag: 'train', 'test', or 'pred'. (For simplicity, 'val' is omitted.)
             size: List or tuple [seq_len, label_len, pred_len]. Defaults are used if None.
             pair_id: The experiment pair id to load from the YAML file.
@@ -335,8 +328,8 @@ class ODE_Lorenz(Dataset):
         self.features = features
 
         # Define the ODE_Lorenz data folder and YAML configuration file.
-        self.data_folder = "C://Users//david//Documents//CTF-for-Science-1//data//ODE_Lorenz"
-        self.yaml_path = "C://Users//david//Documents//CTF-for-Science-1//data//ODE_Lorenz//ODE_Lorenz.yaml"
+        self.data_folder = top_dir.parent.parent.parent / 'data' / 'ODE_Lorenz'
+        self.yaml_path = top_dir.parent.parent.parent / 'data' / 'ODE_Lorenz' / 'ODE_Lorenz.yaml'
 
         self.__load_config__()
         self.__read_data__()
@@ -447,17 +440,6 @@ class ODE_Lorenz(Dataset):
             return self.scaler.inverse_transform(data)
         return data
 
-    
-import os
-import yaml
-import scipy.io
-import numpy as np
-import pandas as pd
-import torch
-from torch.utils.data import Dataset
-from sklearn.preprocessing import StandardScaler
-from utils.timefeatures import time_features
-
 class PDE_KS(Dataset):
     def __init__(self, root_path, flag='train', size=None, pair_id=1,
                  features='M', scale=True, timeenc=0, freq=None, train_only=False):
@@ -465,8 +447,7 @@ class PDE_KS(Dataset):
         Dataset class for the PDE_KS spatio-temporal dynamical system.
         
         Parameters:
-            root_path: Parent directory containing the PDE_KS folder,
-                       e.g., "C:\\Users\\david\\Documents\\CTF-for-Science-1\\data"
+            root_path: Parent directory containing the PDE_KS folder
             flag: 'train', 'test', or 'pred'. (For simplicity, 'val' is omitted.)
             size: List or tuple [seq_len, label_len, pred_len]. Defaults are used if None.
             pair_id: The experiment pair id to load from the YAML file.
@@ -492,8 +473,8 @@ class PDE_KS(Dataset):
         self.features = features
 
         # Define the PDE_KS data folder and YAML configuration file.
-        self.data_folder = os.path.join(root_path, 'PDE_KS')
-        self.yaml_path = os.path.join(self.data_folder, 'PDE_KS.yaml')
+        self.data_folder = top_dir.parent.parent.parent / 'data' / 'PDE_KS'
+        self.yaml_path = top_dir.parent.parent.parent / 'data' / 'PDE_KS' / 'PDE_KS.yaml'
 
         self.__load_config__()
         self.__read_data__()
