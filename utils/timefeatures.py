@@ -81,6 +81,15 @@ def time_features_from_frequency_str(freq_str: str) -> List[TimeFeature]:
     freq_str
         Frequency string of the form [multiple][granularity] such as "12H", "5min", "1D" etc.
     """
+        # Check if the frequency represents fractional seconds
+    if freq_str.endswith("S"):
+        try:
+            val = float(freq_str[:-1])
+            if val < 1:
+                # Convert seconds to milliseconds (0.025S -> 25L)
+                freq_str = f"{int(round(val * 1000))}T"
+        except ValueError:
+            pass
 
     features_by_offsets = {
         offsets.YearEnd: [],
