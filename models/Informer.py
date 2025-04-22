@@ -14,78 +14,77 @@ class Model(nn.Module):
     """
     def __init__(self, configs):
         super(Model, self).__init__()
-        self.pred_len = configs.pred_len
-        self.output_attention = configs.output_attention
+        self.pred_len = configs['pred_len']
+        self.output_attention = configs['output_attention']
 
         # Embedding
-        if configs.embed_type == 0:
-            self.enc_embedding = DataEmbedding(configs.enc_in, configs.d_model, configs.embed, configs.freq,
-                                            configs.dropout)
-            self.dec_embedding = DataEmbedding(configs.dec_in, configs.d_model, configs.embed, configs.freq,
-                                           configs.dropout)
-        elif configs.embed_type == 1:
-            self.enc_embedding = DataEmbedding(configs.enc_in, configs.d_model, configs.embed, configs.freq,
-                                                    configs.dropout)
-            self.dec_embedding = DataEmbedding(configs.dec_in, configs.d_model, configs.embed, configs.freq,
-                                                    configs.dropout)
-        elif configs.embed_type == 2:
-            self.enc_embedding = DataEmbedding_wo_pos(configs.enc_in, configs.d_model, configs.embed, configs.freq,
-                                                    configs.dropout)
-            self.dec_embedding = DataEmbedding_wo_pos(configs.dec_in, configs.d_model, configs.embed, configs.freq,
-                                                    configs.dropout)
+        if configs['embed_type'] == 0:
+            self.enc_embedding = DataEmbedding(configs['model']['parameters']['enc_in'], configs['model']['parameters']['d_model'], configs['embed'], configs['freq'],
+                                            configs['model']['parameters']['dropout'])
+            self.dec_embedding = DataEmbedding(configs['model']['parameters']['dec_in'], configs['model']['parameters']['d_model'], configs['embed'], configs['freq'],
+                                           configs['model']['parameters']['dropout'])
+        elif configs['embed_type'] == 1:
+            self.enc_embedding = DataEmbedding(configs['model']['parameters']['enc_in'], configs['model']['parameters']['d_model'], configs['embed'], configs['freq'],
+                                                    configs['model']['parameters']['dropout'])
+            self.dec_embedding = DataEmbedding(configs['model']['parameters']['dec_in'], configs['model']['parameters']['d_model'], configs['embed'], configs['freq'],
+                                                    configs['model']['parameters']['dropout'])
+        elif configs['embed_type'] == 2:
+            self.enc_embedding = DataEmbedding_wo_pos(configs['model']['parameters']['enc_in'], configs['model']['parameters']['d_model'], configs['embed'], configs['freq'],
+                                                    configs['model']['parameters']['dropout'])
+            self.dec_embedding = DataEmbedding_wo_pos(configs['dec_in'], configs['d_model'], configs['embed'], configs['freq'],
+                                                    configs['model']['parameters']['dropout'])
 
-        elif configs.embed_type == 3:
-            self.enc_embedding = DataEmbedding_wo_temp(configs.enc_in, configs.d_model, configs.embed, configs.freq,
-                                                    configs.dropout)
-            self.dec_embedding = DataEmbedding_wo_temp(configs.dec_in, configs.d_model, configs.embed, configs.freq,
-                                                    configs.dropout)
-        elif configs.embed_type == 4:
-            self.enc_embedding = DataEmbedding_wo_pos_temp(configs.enc_in, configs.d_model, configs.embed, configs.freq,
-                                                    configs.dropout)
-            self.dec_embedding = DataEmbedding_wo_pos_temp(configs.dec_in, configs.d_model, configs.embed, configs.freq,
-                                                    configs.dropout)
+        elif configs['embed_type'] == 3:
+            self.enc_embedding = DataEmbedding_wo_temp(configs['model']['parameters']['enc_in'], configs['model']['parameters']['d_model'], configs['embed'], configs['freq'],
+                                                    configs['model']['parameters']['dropout'])
+            self.dec_embedding = DataEmbedding_wo_temp(configs['model']['parameters']['dec_in'], configs['model']['parameters']['d_model'], configs['embed'], configs['freq'],
+                                                    configs['model']['parameters']['dropout'])
+        elif configs['embed_type'] == 4:
+            self.enc_embedding = DataEmbedding_wo_pos_temp(configs['model']['parameters']['enc_in'], configs['model']['parameters']['d_model'], configs['embed'], configs['freq'],
+                                                    configs['model']['parameters']['dropout'])
+            self.dec_embedding = DataEmbedding_wo_pos_temp(configs['model']['parameters']['dec_in'], configs['model']['parameters']['d_model'], configs['embed'], configs['freq'],
+                                                    configs['model']['parameters']['dropout'])
         # Encoder
         self.encoder = Encoder(
             [
-                EncoderLayer(
-                    AttentionLayer(
-                        ProbAttention(False, configs.factor, attention_dropout=configs.dropout,
-                                      output_attention=configs.output_attention),
-                        configs.d_model, configs.n_heads),
-                    configs.d_model,
-                    configs.d_ff,
-                    dropout=configs.dropout,
-                    activation=configs.activation
-                ) for l in range(configs.e_layers)
+            EncoderLayer(
+                AttentionLayer(
+                ProbAttention(False, configs['model']['parameters']['factor'], attention_dropout=configs['model']['parameters']['dropout'],
+                          output_attention=configs['output_attention']),
+                configs['model']['parameters']['d_model'], configs['model']['parameters']['n_heads']),
+                configs['model']['parameters']['d_model'],
+                configs['d_ff'],
+                dropout=configs['model']['parameters']['dropout'],
+                activation=configs['activation']
+            ) for l in range(configs['e_layers'])
             ],
             [
-                ConvLayer(
-                    configs.d_model
-                ) for l in range(configs.e_layers - 1)
-            ] if configs.distil else None,
-            norm_layer=torch.nn.LayerNorm(configs.d_model)
+            ConvLayer(
+                configs['model']['parameters']['d_model']
+            ) for l in range(configs['e_layers'] - 1)
+            ] if configs['distil'] else None,
+            norm_layer=torch.nn.LayerNorm(configs['model']['parameters']['d_model'])
         )
         # Decoder
         self.decoder = Decoder(
             [
-                DecoderLayer(
-                    AttentionLayer(
-                        ProbAttention(True, configs.factor, attention_dropout=configs.dropout, output_attention=False),
-                        configs.d_model, configs.n_heads),
-                    AttentionLayer(
-                        ProbAttention(False, configs.factor, attention_dropout=configs.dropout, output_attention=False),
-                        configs.d_model, configs.n_heads),
-                    configs.d_model,
-                    configs.d_ff,
-                    dropout=configs.dropout,
-                    activation=configs.activation,
-                )
-                for l in range(configs.d_layers)
+            DecoderLayer(
+                AttentionLayer(
+                ProbAttention(True, configs['model']['parameters']['factor'], attention_dropout=configs['model']['parameters']['dropout'], output_attention=False),
+                configs['model']['parameters']['d_model'], configs['model']['parameters']['n_heads']),
+                AttentionLayer(
+                ProbAttention(False, configs['model']['parameters']['factor'], attention_dropout=configs['model']['parameters']['dropout'], output_attention=False),
+                configs['model']['parameters']['d_model'], configs['model']['parameters']['n_heads']),
+                configs['model']['parameters']['d_model'],
+                configs['d_ff'],
+                dropout=configs['model']['parameters']['dropout'],
+                activation=configs['activation'],
+            )
+            for l in range(configs['model']['parameters']['d_layers'])
             ],
-            norm_layer=torch.nn.LayerNorm(configs.d_model),
-            projection=nn.Linear(configs.d_model, configs.c_out, bias=True)
+            norm_layer=torch.nn.LayerNorm(configs['model']['parameters']['d_model']),
+            projection=nn.Linear(configs['model']['parameters']['d_model'], configs['model']['parameters']['c_out'], bias=True)
         )
-
     def forward(self, x_enc, x_mark_enc, x_dec, x_mark_dec,
                 enc_self_mask=None, dec_self_mask=None, dec_enc_mask=None):
 
