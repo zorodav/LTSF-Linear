@@ -1,6 +1,6 @@
 dataset:
   name: ODE_Lorenz
-  pair_id: 1           # Run on all available sub-datasets
+  pair_id: 9           # Run on all available sub-datasets
 
 model:
   name: NLinear
