@@ -42,7 +42,7 @@ def main(config_path):
 
             if config['training']['do_predict']:
                 print(f">>>>>>> Predicting: {setting} <<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-                predictions, metrics = exp.predict(setting, save_results=True)
+                predictions, metrics = exp.predict(setting)
                 pair_dir = results_dir / f"iteration_{itr}"
                 pair_dir.mkdir(parents=True, exist_ok=True)
                 np.save(pair_dir / 'predictions.npy', predictions)
@@ -59,7 +59,7 @@ def main(config_path):
         setting = f"{model_name}_{dataset_name}_test"
         if config['training']['do_predict']:
             print(f">>>>>>> Predicting: {setting} <<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-            predictions, metrics = exp.predict(setting, save_results=True)
+            predictions, metrics = exp.predict(setting)
             pair_dir = results_dir / "test"
             pair_dir.mkdir(parents=True, exist_ok=True)
             np.save(pair_dir / 'predictions.npy', predictions)
