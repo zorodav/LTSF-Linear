@@ -4,9 +4,10 @@ import numpy as np
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 import importlib.util
-module_path = r"C://Users//david//Documents//CTF-for-Science-1//ctf4science//data_module.py"
+module_path = Path(__file__).parent.parent.parent.parent / "ctf4science" / "data_module.py"
+module_path = module_path.resolve()
 
-spec = importlib.util.spec_from_file_location("data_module", module_path)
+spec = importlib.util.spec_from_file_location("data_module", str(module_path))
 data_module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(data_module)
 
